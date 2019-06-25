@@ -61,3 +61,66 @@
 ### Client-Server Workflow
 
 ![Client-server workflow](readme_files/client_server_workflow.png)
+
+## Configuring the Development Environment with Webpack and Babel
+
+### Webpack
+
+- Uses *babel* used to convert *.jsx* and ES6 files into *.js* files
+- Bundles set of files connected by *import* statements into one file
+- Uses *webpack-dev-server* plugin to create convenient environment
+
+```bash
+npm init -y
+```
+
+```bash
+npm install --save-dev webpack webpack-cli webpack-dev-server
+```
+
+```bash
+npm install --save-dev @babel/core @babel/node @babel/preset-env @babel/preset-react @babel/register babel-loader
+```
+
+> .babelrc
+
+```json
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "node": "current"
+      }
+    }],
+    "@babel/preset-react"
+  ]
+}
+```
+
+> webpack.config.js
+
+```js
+const path = require('path');
+
+module.exports = {
+  mode: "development",
+  entry: path.resolve(__dirname, 'src', 'app'),
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: "bundle.js",
+    publicPath: "/"
+  },
+  resolve: {
+    extensions: ['.js', '.jsx']
+  },
+  devServer: {
+    historyApiFallback: true
+  },
+  module: {
+    rules: [{
+      test: /\.jsx?/,
+      loader: "babel-loader"
+    }]
+  }
+}
+```
