@@ -312,3 +312,72 @@ const mapStateToProps = (state, ownProps) => {
 
 export const ConnectedTaskList = connect(mapStateToProps)(TaskList);
 ```
+
+### Routing and Navigation
+
+- "Routing" is a term for when the form of the application is affected by the URL bar
+- ```react-router```determines which React component to display based on URL
+- Good use of routing allows a lot of information to be codified in URL
+
+### Routing and Navigation - Demo
+
+> npm install --save react-router-dom
+
+> npm install --save history
+
+> src/components/Navigation.js
+
+```js
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import React from 'react';
+
+ const Nagivation = () => (
+   <div>
+     <Link to='/dashboard'>
+        <h1>My Application</h1>
+     </Link>
+   </div>
+ )
+
+ const mapStateToProps = state => {
+   return state;
+ }
+
+ export const ConnectedNavigation = connect(mapStateToProps)(Nagivation);
+```
+
+> src/store/history.js
+
+```js
+import { createBrowserHistory } from 'history';
+
+export const history = createBrowserHistory();
+```
+
+> update: src/components/Main.js
+
+```js
+import React  from 'react';
+import { Provider } from 'react-redux';
+import { store } from '../store';
+import { ConnectedDashboard } from './Dashboard';
+import { Router, Route } from 'react-router-dom';
+import { history } from '../store/history';
+import { ConnectedNavigation } from './Navigation';
+
+export const Main = () => (
+  <Router history={ history }>
+    <Provider store={store}>
+      <div>
+        <ConnectedNavigation />
+        <Route exact path='/dashboard' render={
+          () => (<ConnectedDashboard />)
+        }>
+
+        </Route>
+      </div>
+    </Provider>
+  </Router>
+)
+```
