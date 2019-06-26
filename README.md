@@ -124,3 +124,191 @@ module.exports = {
   }
 }
 ```
+
+## Implementing React Components and Redux State
+
+### Overview of Redux
+
+- Manages underlying data
+- Application state can be easily accessed
+- Changing application state occurs only via actions
+- Redux state is provided to React components via React-Redux, a small connector library
+
+### Create default application state as JSON file for development - Demo
+
+> src/server/defaultServer.js
+
+```js
+export const defaultState = {
+  users: [{
+    id: "U1",
+    name: "Dev"
+  }, {
+    id: "U2",
+    name: "C. Eeyo"
+  }],
+  groups: [{
+    name: "To Do",
+    id: "G1",
+    owner: "U1"
+  }, {
+    name: "Doing",
+    id: "G2",
+    owner: "U1"
+  }, {
+    name: "Done",
+    id: "G3",
+    owner: "U1"
+  }],
+  tasks: [{
+    name: "Refactor tests",
+    id: "T1",
+    group: "G1",
+    owner: "U1",
+    isComplete: false,
+  }, {
+    name: "Meet with CTO",
+    id: "T2",
+    group: "G1",
+    owner: "U1",
+    isComplete: true,
+  }, {
+    name: "Compile ES6",
+    id: "T3",
+    group: "G2",
+    owner: "U2",
+    isComplete: false,
+  }, {
+    name: "Update component snapshots",
+    id: "T4",
+    group: "G2",
+    owner: "U1",
+    isComplete: true,
+  }, {
+    name: "Production optimizations",
+    id: "T5",
+    group: "G3",
+    owner: "U1",
+    isComplete: false,
+  }],
+  comments: [{
+    owner: "U1",
+    id: "C1",
+    task: "T1",
+    content: "Great work!"
+  }]
+} 
+```
+
+### Create basic Redux store to provide state to application as necessary - Demo
+
+```bash
+npm install --save redux@4.0.0
+```
+
+> src/app/store/index.js
+
+```js
+import { createStore } from 'redux';
+import { defaultState } from '../../server/defaultState';
+
+const reducer = (state = defaultState, action) => state;
+
+export const store = createStore(
+  reducer
+)
+```
+
+> update: src/app/index.js
+
+```js
+console.log('hello world');
+
+import { store } from './store';
+
+console.log(store.getState());
+
+```
+
+### Adding a Dashboard Component - Demo
+
+```bash
+npm install --save react@16.5.0 react-dom@16.5.0 react-redux@5.0.7
+```
+
+> src/components/Dashboard.js
+
+```js
+import React from 'react';
+import { connect } from 'react-redux';
+import { ConnectedTaskList } from './TaskList';
+
+export const Dashboard = ({ groups }) => (
+  <div>
+    <h1>Dashboard</h1>
+    {
+      groups.map(group => (
+        <ConnectedTaskList id={group.id} name={group.name} />
+      ))
+    }
+  </div>
+);
+
+const mapStateToProps = state => {
+  return {
+    groups: state.groups
+  }
+}
+
+export const ConnectedDashboard = connect(mapStateToProps)(Dashboard);
+```
+
+> src/components/Main.js
+
+```js
+import React  from 'react';
+import { Provider } from 'react-redux';
+import { store } from '../store';
+import { ConnectedDashboard } from './Dashboard';
+
+export const Main = () => (
+  <Provider store={store}>
+    <div>
+      <ConnectedDashboard />
+    </div>
+  </Provider>
+)
+```
+
+> src/components/TaskList.js
+
+```js
+import React from 'react';
+import { connect } from 'react-redux';
+
+export const TaskList = ({ tasks, name }) => (
+  <div>
+    <h3>
+      { name }
+    </h3>
+    <div>
+      {
+        tasks.map(task => (
+          <div>{ task.name }</div>
+        ))
+      }
+    </div>
+  </div>
+)
+
+const mapStateToProps = (state, ownProps) => {
+  let groupID = ownProps.id;
+  return {
+    name: ownProps.name,
+    id: groupID,
+    tasks: state.tasks.filter(task => task.group === groupID)
+  }
+}
+
+export const ConnectedTaskList = connect(mapStateToProps)(TaskList);
+```
