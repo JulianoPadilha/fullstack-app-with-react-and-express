@@ -381,3 +381,21 @@ export const Main = () => (
   </Router>
 )
 ```
+
+### Adding new taks
+
+- Reducer must bet updated to allow tasks array to be changed
+- Tasks need random ID, reducers can't be random, therefore Saga or Thunk is needed
+- Updated state is reflected automatically in React component appearance
+
+#### Sagas in brief
+
+- Sagas run in the background of Redux applications
+- Respond to actions by generating "side-effects" (anything outside the app)
+- One of only a few places where generator functions are found
+
+#### Generators in brief
+
+- Standard JavaScript functions (non-generator) return a single value, instantly
+- Generators can return any number of values, not just one
+- Generator values can be returned at a later time (asynchronously)
