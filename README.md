@@ -399,3 +399,18 @@ export const Main = () => (
 - Standard JavaScript functions (non-generator) return a single value, instantly
 - Generators can return any number of values, not just one
 - Generator values can be returned at a later time (asynchronously)
+
+### Adding new taks - Demo
+
+> npm install --save redux-logger redux-saga
+
+> npm install --save uuid
+
+Files with changes or created:
+
+> src/components/Dashboard.js
+> src/components/TaskList.js
+> src/store/index.js
+
+> src/store/mutations.js
+> src/store/sagas.mock.js
