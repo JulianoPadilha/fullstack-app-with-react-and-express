@@ -409,8 +409,11 @@ export const Main = () => (
 Files with changes or created:
 
 > src/components/Dashboard.js
+
 > src/components/TaskList.js
+
 > src/store/index.js
 
 > src/store/mutations.js
+
 > src/store/sagas.mock.js
