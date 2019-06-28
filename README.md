@@ -417,3 +417,71 @@ Files with changes or created:
 > src/store/mutations.js
 
 > src/store/sagas.mock.js
+
+### Implementing Task Details Route part 1: Displaying data
+
+
+#### Using mock files during development
+
+- Files with .mock extension indicate the files does not contain the true business logic
+- Used to reduce complexity (e.g., does not depend on server)
+- Mocks are commonly used in testing frameworks such a Jest
+ 
+> src/components/TaskDetail.js
+
+> update: src/components/Main.js
+
+> update: src/components/TaskList.js
+
+```js
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+
+const TaskDetail = ({
+  id,
+  comments,
+  task,
+  groups,
+  isComplete
+}) => (
+  <div>
+    <div>
+      <input value={task.name} />
+    </div>
+
+    <div>
+      <button>Complete / Reopen Task</button>
+    </div>
+
+    <div>
+      <select>
+        {groups.map(group => {
+          return (<option key={group.id} value={group.id}>{group.name}</option>)
+        })}
+      </select>
+    </div>
+
+    <div>
+      <Link to='/dashboard'>
+        <button>Done</button>
+      </Link>
+    </div>
+  </div>
+)
+
+const mapStateToProps = (state, ownProps) => {
+  let id = ownProps.match.params.id;
+  let task = state.tasks.find(task => task.id === id);
+  let groups = state.groups;
+
+  return {
+    id,
+    task,
+    groups,
+    isComplete: task.isComplete
+  }
+};
+
+export const ConnectedTaskDetail = connect(mapStateToProps)(TaskDetail);
+```
