@@ -558,3 +558,80 @@ initializeDB();
     "initialize": "babel-node src/server/initialize-db"
   },
 ```
+
+### Creating a Server
+
+#### Why do we need a server?
+
+- Confidential logic muts be hidden from end user
+- Provides consistent way of working with database
+- Useful for serving HTML and JS files of finished application
+
+#### What is Express?
+
+- NPM library which warps existing http toolset
+- Process of creating a new server and "listening" to specific port
+- Functional way of describing responses to HTTP requests from application
+
+> npm install --save-dev express
+
+> npm install --save-dev cors
+
+> npm install --save-dev body-parser
+
+> src/server/server.js
+
+```js
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import { connectDB } from './connect-db';
+
+let port = 3000;
+let app = express();
+
+app.listen(port, console.log('Server listening on port', port));
+
+// app.get('/', (req, res) => {
+//   res.send('Hello World');
+// });
+
+app.use(
+  cors(),
+  bodyParser.urlencoded({extended: true}),
+  bodyParser.json()
+);
+
+export const addNewTask = async task => {
+  let db = await connectDB();
+  let collection = db.collection('tasks');
+  await collection.insertOne(task);
+};
+
+app.post('/task/new', async (req, res) => {
+  let task = req.body.task;
+  await addNewTask(task);
+  res.status(200).send(); 
+});
+```
+
+> src/server.spec.js
+
+```js
+import { addNewTask } from "./server";
+
+addNewTask({
+  name: "My task",
+  id: "12345"
+});
+```
+
+> uptade: package.json
+
+```
+"scripts": {
+  ....
+  "server": "babel-node src/server/server",
+  "server-test": "babel-node src/server/server.spec"
+  },
+```
