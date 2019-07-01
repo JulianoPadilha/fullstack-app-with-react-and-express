@@ -236,7 +236,7 @@ console.log(store.getState());
 npm install --save react@16.5.0 react-dom@16.5.0 react-redux@5.0.7
 ```
 
-> src/components/Dashboard.js
+> src/app/components/Dashboard.js
 
 ```js
 import React from 'react';
@@ -263,7 +263,7 @@ const mapStateToProps = state => {
 export const ConnectedDashboard = connect(mapStateToProps)(Dashboard);
 ```
 
-> src/components/Main.js
+> src/app/components/Main.js
 
 ```js
 import React  from 'react';
@@ -280,7 +280,7 @@ export const Main = () => (
 )
 ```
 
-> src/components/TaskList.js
+> src/app/components/TaskList.js
 
 ```js
 import React from 'react';
@@ -325,7 +325,7 @@ export const ConnectedTaskList = connect(mapStateToProps)(TaskList);
 
 > npm install --save history
 
-> src/components/Navigation.js
+> src/app/components/Navigation.js
 
 ```js
 import { connect } from 'react-redux';
@@ -347,7 +347,7 @@ import React from 'react';
  export const ConnectedNavigation = connect(mapStateToProps)(Nagivation);
 ```
 
-> src/store/history.js
+> src/app/store/history.js
 
 ```js
 import { createBrowserHistory } from 'history';
@@ -355,7 +355,7 @@ import { createBrowserHistory } from 'history';
 export const history = createBrowserHistory();
 ```
 
-> update: src/components/Main.js
+> update: src/app/components/Main.js
 
 ```js
 import React  from 'react';
@@ -408,15 +408,15 @@ export const Main = () => (
 
 Files with changes or created:
 
-> src/components/Dashboard.js
+> src/app/components/Dashboard.js
 
-> src/components/TaskList.js
+> src/app/components/TaskList.js
 
-> src/store/index.js
+> src/app/store/index.js
 
-> src/store/mutations.js
+> src/app/store/mutations.js
 
-> src/store/sagas.mock.js
+> src/app/store/sagas.mock.js
 
 ### Implementing Task Details Route part 1: Displaying data
 
@@ -427,11 +427,11 @@ Files with changes or created:
 - Used to reduce complexity (e.g., does not depend on server)
 - Mocks are commonly used in testing frameworks such a Jest
  
-> src/components/TaskDetail.js
+> src/app/components/TaskDetail.js
 
-> update: src/components/Main.js
+> update: src/app/components/Main.js
 
-> update: src/components/TaskList.js
+> update: src/app/components/TaskList.js
 
 ```js
 import React from 'react';
@@ -485,3 +485,11 @@ const mapStateToProps = (state, ownProps) => {
 
 export const ConnectedTaskDetail = connect(mapStateToProps)(TaskDetail);
 ```
+
+### Implementing Task Details Route part 2: Mutating data
+
+> update: src/app/components/TaskDetail.js
+
+> update: src/app/store/mutations.js
+
+> update: src/app/store/index.js
