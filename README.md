@@ -493,3 +493,68 @@ export const ConnectedTaskDetail = connect(mapStateToProps)(TaskDetail);
 > update: src/app/store/mutations.js
 
 > update: src/app/store/index.js
+
+## Creating Persistent Data Storage with Node, Express and MongoDB
+
+### What is MongoDB?
+
+- Database for storing persistent data
+- Non-relational (collections, nor tables, fluid data structure)
+- Convenint JSON-based communication works with Node
+- Alternative to relational databases such as MySQL
+
+**Download and Run MongoDB**
+
+> https://www.robinwieruch.de/mongodb-macos-setup/
+
+### Initializing the Database
+
+**Download Robo 3T**
+
+> https://robomongo.org/
+
+After that we create a new connection with default values.
+
+> npm install --save-dev mongodb@3.1.10
+
+> src/app/server/connect-db.js
+
+```js
+import { MongoClient } from 'mongodb'; 
+const url = 'mongodb://localhost:27017/myorganizer';
+let db = null; 
+
+export const connectDB = async () => {
+  if (db) return db;
+  let client = await MongoClient.connect(url, { useNewUrlParser: true });
+  db = client.db();
+  console.info("Got Db,", db);
+  return db;
+}
+```
+
+> src/app/server/initialize-db.js
+
+```js
+import { defaultState } from './defaultState';
+import { connectDB } from './connect-db';
+
+const initializeDB = async () => {
+  let db = await connectDB();
+  for (let collectionName in defaultState) {
+    let collection = db.collection(collectionName);
+    await collection.insertMany(defaultState[collectionName]);
+  }
+}
+
+initializeDB();
+```
+
+> update: package.json
+
+```
+"scripts": {
+   ....
+    "initialize": "babel-node src/server/initialize-db"
+  },
+```
