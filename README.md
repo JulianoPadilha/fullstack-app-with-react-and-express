@@ -737,3 +737,68 @@ scripts": {
 ```
 
 ### Using Client-Originated HTTP Requests to Modify Persistent Data
+
+#### HTTP Requests
+
+- Used to communicate with your server or other authorized domains
+- Cross-origin request security (CORS) prevens requests to anauthorized domains
+- Many front-end tools to make HTTP requests: Axios, jQuery, fetch, etc.
+
+> npm install --save axios
+
+> src/app/store/sagas.js
+
+```js 
+import { take, put, select } from 'redux-saga/effects';
+import uuid from 'uuid';
+import axios from 'axios';
+
+import * as mutations from './mutations';
+
+const url = 'http://localhost:3000';
+
+export function* taskCreationSaga() {
+  while (true) {
+    const { groupId } = yield take(mutations.REQUEST_TASK_CREATION);
+    const ownerId = 'U1';
+    const taskId = uuid();
+    yield put(mutations.createTask(taskId, groupId, ownerId));
+    const { res } = yield axios.post(`${url}/task/new`, {
+      task: {
+        id: taskId,
+        group: groupId,
+        owner: ownerId,
+        isComplete: false,
+        name: "New Task"
+      }
+    });
+  }
+}
+
+export function* taskModificationSaga() {
+  while (true) {
+    const task = yield take([
+      mutations.SET_TASK_GROUP,
+      mutations.SET_TASK_NAME,
+      mutations.SET_TASK_COMPLETE
+    ]);
+    axios.post(`${url}/task/update`, {
+      task: {
+        id: task.taskId,
+        group: task.groupId,
+        name: task.name,
+        isComplete: task.isComplete
+      }
+    });
+  }
+}
+```
+
+> update: src/app/store/index.js
+
+```js
+...
+// import * as sagas from './sagas.mock';
+import * as sagas from './sagas';
+...
+```
