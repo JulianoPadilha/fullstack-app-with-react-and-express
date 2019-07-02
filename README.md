@@ -382,7 +382,7 @@ export const Main = () => (
 )
 ```
 
-### Adding new taks
+### Adding new tasks
 
 - Reducer must bet updated to allow tasks array to be changed
 - Tasks need random ID, reducers can't be random, therefore Saga or Thunk is needed
@@ -400,7 +400,7 @@ export const Main = () => (
 - Generators can return any number of values, not just one
 - Generator values can be returned at a later time (asynchronously)
 
-### Adding new taks - Demo
+### Adding new tasks - Demo
 
 > npm install --save redux-logger redux-saga
 
@@ -573,6 +573,8 @@ initializeDB();
 - Process of creating a new server and "listening" to specific port
 - Functional way of describing responses to HTTP requests from application
 
+### Creating a server and updating tasks - part 1
+
 > npm install --save-dev express
 
 > npm install --save-dev cors
@@ -634,4 +636,85 @@ addNewTask({
   "server": "babel-node src/server/server",
   "server-test": "babel-node src/server/server.spec"
   },
+```
+
+### Creating a server and updating tasks - part 2
+
+> src/server/server.js
+
+```js
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import { connectDB } from './connect-db';
+
+let port = 3000;
+let app = express();
+
+app.listen(port, console.log('Server listening on port', port));
+
+// app.get('/', (req, res) => {
+//   res.send('Hello World');
+// });
+
+app.use(
+  cors(),
+  bodyParser.urlencoded({extended: true}),
+  bodyParser.json()
+);
+
+export const addNewTask = async task => {
+  let db = await connectDB();
+  let collection = db.collection('tasks');
+  await collection.insertOne(task);
+};
+
+export const updateTask = async task => {
+  let { id, group, isComplete, name } = task;
+  let db = await connectDB();
+  let collection = db.collection('tasks');
+
+  if(group) {
+    await collection.updateOne({id}, {$set: {group}});
+  }
+
+  if(name) {
+    await collection.updateOne({id}, {$set: {name}});
+  }
+
+  if(isComplete !== undefined) {
+    await collection.updateOne({id}, {$set: {isComplete}});
+  }
+}
+
+app.post('/task/new', async (req, res) => {
+  let task = req.body.task;
+  await addNewTask(task);
+  res.status(200).send(); 
+});
+
+app.post('/task/update', async (req, res) => {
+  let task = req.body.task;
+  await updateTask(task);
+  res.status(200).send(); 
+});
+```
+
+> src/server/server.spec.js
+
+```js
+import { addNewTask, updateTask } from "./server";
+
+const myFunc = async () => {
+  await addNewTask({
+    name: "My task",
+    id: "12345"
+  });
+
+  await updateTask({
+    name: "My task - updated",
+    id: "12345"
+  })
+
+myFunc();
 ```
