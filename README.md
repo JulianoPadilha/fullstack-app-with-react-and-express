@@ -802,3 +802,24 @@ export function* taskModificationSaga() {
 import * as sagas from './sagas';
 ...
 ```
+
+## Authentication
+
+### What is Authentication?
+
+- An individual claims to be a certain user and demands access to certain data
+- Authentication determines if the individual is the user in question
+
+### Authentication Overview
+
+- Process that determines if user has permission to access data
+- User password can be compared to hash on DB
+- Allows multiple users to have separate, private data
+- Necessary for most e-commercer activities
+
+### Authentication: More than passwords
+
+- Password
+- Fingerprint, Retinal scan, Microchip
+- Third-party confirmation (Facebook, Twitter)
+- State-issued documents
