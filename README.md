@@ -715,6 +715,25 @@ const myFunc = async () => {
     name: "My task - updated",
     id: "12345"
   })
+}; 
 
 myFunc();
 ```
+
+## Integrating React View Layers with Persistent Data
+
+### Initializing the Server and Client simultaneously
+
+- Script will initialize Webpack, which serves our application
+- Script will also initialize Express, which will wait for HTTP requests from our application and modify DB
+
+> npm install --save-dev concurrently
+
+```
+scripts": {
+  ....
+  "start-dev": "concurrently \"npm run server\" \"npm run dev\""
+},
+```
+
+### Using Client-Originated HTTP Requests to Modify Persistent Data
