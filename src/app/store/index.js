@@ -9,7 +9,7 @@ import * as sagas from './sagas';
 import * as mutations from './mutations';
 
 const constCombineReducers = combineReducers({
-  session(session = defaultState.session) {
+  session(session = defaultState.session || {}) {
     return session;
   },
   tasks(tasks = defaultState.tasks, action) {

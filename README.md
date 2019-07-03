@@ -831,3 +831,39 @@ import * as sagas from './sagas';
 - Typically, route guards redirect to a "Login" or "403" page when credentials are not available
 
 > npm install --save react-router
+
+## Creating a Login Page
+
+> npm install --save md5
+
+> update: src/app/components/Login.js
+
+```js
+import React from 'react';
+import { connect } from 'react-redux';
+
+const LoginComponent = () => {
+  return (
+    <div>
+      <h2>Please login</h2>
+      <form>
+        <input type='text' placeholder='username' name='username' defaultValue='Dev' />
+        <input type='password' placeholder='password' name='password' defaultValue='' />
+        <button type='submit'>Login</button>
+      </form>
+    </div>
+  )
+};
+
+const mapStateToProps = state => state;
+
+export const ConnectedLogin = connect(mapStateToProps)(LoginComponent);
+```
+
+> update: src/app/store/index.js
+
+> update: src/app/server/defaultState.js
+
+> update: src/app/server/server.js
+
+> update: src/app/server/initialize-db.js
