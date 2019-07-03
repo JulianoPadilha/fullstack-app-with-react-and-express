@@ -9,6 +9,9 @@ import * as sagas from './sagas';
 import * as mutations from './mutations';
 
 const constCombineReducers = combineReducers({
+  session(session = defaultState.session) {
+    return session;
+  },
   tasks(tasks = defaultState.tasks, action) {
     switch (action.type) {
       case mutations.CREATE_TASK:

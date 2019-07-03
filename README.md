@@ -805,21 +805,29 @@ import * as sagas from './sagas';
 
 ## Authentication
 
-### What is Authentication?
+#### What is Authentication?
 
 - An individual claims to be a certain user and demands access to certain data
 - Authentication determines if the individual is the user in question
 
-### Authentication Overview
+#### Authentication Overview
 
 - Process that determines if user has permission to access data
 - User password can be compared to hash on DB
 - Allows multiple users to have separate, private data
 - Necessary for most e-commercer activities
 
-### Authentication: More than passwords
+#### Authentication: More than passwords
 
 - Password
 - Fingerprint, Retinal scan, Microchip
 - Third-party confirmation (Facebook, Twitter)
 - State-issued documents
+
+### Route Guards
+
+- Some routes shoud onlye be accessed by users with correct credentials
+- Route guards organize authentication logic at router level
+- Typically, route guards redirect to a "Login" or "403" page when credentials are not available
+
+> npm install --save react-router
